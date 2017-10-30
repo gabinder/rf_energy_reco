@@ -1,1 +1,19 @@
 # rf_energy_reco
+
+rf_energy_reco is a project to use random forests to learn the energy of track-like events using the energy loss profile from millipede
+
+The random forest implementation is from scikit-learn:
+
+http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html
+
+Quantiles of the millipede energy loss distribution are used as features for learning.  The default number of quantiles is 101, but this is configurable.  The additonal features are the total contained track length and deposited energy.  All millipede losses outside the detector are excluded, and the VHESelfVeto project is used to calculate containment.
+
+Examples scripts are provided to illustrate training and cross-validation.  These should work out-of-the-box on cobalt, and use the dataset 11069 processed at Muon Level3.
+
+The script book.py is used to obtain the needed features from an .i3 file and write to an .hdf5 file for training the random forest.  By default the target of the random forest is the in-ice neutrino energy, which is intended for use with starting tracks.  For through-going tracks, one can select to learn the most energetic muon energy instead.
+
+The script train.py is used to train the random forest using the data from the generated .hdf5 file.  It can optionally peform k-fold cross validation and store the results in the hdf5 file.
+
+The script plot.py is used to plot the neutrino energy resolution for starting tracks using the method from the energy reconstruction paper: https://arxiv.org/abs/1311.4767
+
+Lastly, the script predict.py is provided to add the prediction of the random forest into a new .i3 file that was not used for training.
